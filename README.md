@@ -1,2 +1,2 @@
 # CPMBase
-C#で書かれたCellerPotsモデルのプログラムです。
+C#で書かれたCellular Pots Modelのプログラムです。
