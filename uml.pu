@@ -1,0 +1,10 @@
+@startuml
+
+
+
+ICalcuratable : 四則演算が出来る
+
+
+
+
+@enduml
