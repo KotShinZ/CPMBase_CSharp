@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("CPMBase")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+500823afe800d0d2a48c3551c891257d5e82dd38")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+961291815b55ef2c25479b2af3402065499ecf37")]
 [assembly: System.Reflection.AssemblyProductAttribute("CPMBase")]
 [assembly: System.Reflection.AssemblyTitleAttribute("CPMBase")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

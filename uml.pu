@@ -1,8 +1,62 @@
 @startuml
 
 
+class Position
+{
+    arrayPosition : Vector3
+    realPosition : Vector3
+}
 
-ICalcuratable : 四則演算が出来る
+package Area
+{
+    class CellArea{
+        pos : Position
+        cellAreaArray : CellAreaArray
+    }
+
+    class CellAreaArray
+    {
+        cellArea : CellArea[,,]
+        dim : Dimention
+        size : RangePosition
+        SetCellArea() : セルエリアを設定する
+        AllFunc() : 全てのセルエリアに対して関数を実行する
+    }
+}
+
+package CPM 
+{
+    class CPMArea
+    {
+        Cell : Cell
+        Update() : 細胞を更新する
+    }
+
+    class CPM_Base{
+        cells : Cell[]
+        Add() : 細胞を追加する
+        Update() : 細胞を更新する
+    }
+
+    CPMArea --> CPM_Base
+}
+
+
+
+class Cell{
+    Some
+    Update() : 細胞を更新する
+}
+
+
+Position --> CellArea
+CellArea -> CPMArea
+Cell -> CPM_Base 
+
+CellAreaArray -> CPM_Base
+CellArea --> CellAreaArray
+
+
 
 
 

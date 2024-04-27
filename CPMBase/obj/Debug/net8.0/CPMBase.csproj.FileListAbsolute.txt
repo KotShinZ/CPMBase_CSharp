@@ -5,6 +5,21 @@
 /workspaces/CPMBase_CSharp/CPMBase/bin/Debug/net8.0/CPMBase.runtimeconfig.json
 /workspaces/CPMBase_CSharp/CPMBase/bin/Debug/net8.0/CPMBase.dll
 /workspaces/CPMBase_CSharp/CPMBase/bin/Debug/net8.0/CPMBase.pdb
+/workspaces/CPMBase_CSharp/CPMBase/bin/Debug/net8.0/Microsoft.Win32.SystemEvents.dll
+/workspaces/CPMBase_CSharp/CPMBase/bin/Debug/net8.0/Newtonsoft.Json.dll
+/workspaces/CPMBase_CSharp/CPMBase/bin/Debug/net8.0/Savage.Range.dll
+/workspaces/CPMBase_CSharp/CPMBase/bin/Debug/net8.0/SkiaSharp.dll
+/workspaces/CPMBase_CSharp/CPMBase/bin/Debug/net8.0/System.Drawing.Common.dll
+/workspaces/CPMBase_CSharp/CPMBase/bin/Debug/net8.0/runtimes/win/lib/net8.0/Microsoft.Win32.SystemEvents.dll
+/workspaces/CPMBase_CSharp/CPMBase/bin/Debug/net8.0/runtimes/linux-arm/native/libSkiaSharp.so
+/workspaces/CPMBase_CSharp/CPMBase/bin/Debug/net8.0/runtimes/linux-arm64/native/libSkiaSharp.so
+/workspaces/CPMBase_CSharp/CPMBase/bin/Debug/net8.0/runtimes/linux-musl-x64/native/libSkiaSharp.so
+/workspaces/CPMBase_CSharp/CPMBase/bin/Debug/net8.0/runtimes/linux-x64/native/libSkiaSharp.so
+/workspaces/CPMBase_CSharp/CPMBase/bin/Debug/net8.0/runtimes/osx/native/libSkiaSharp.dylib
+/workspaces/CPMBase_CSharp/CPMBase/bin/Debug/net8.0/runtimes/win-arm64/native/libSkiaSharp.dll
+/workspaces/CPMBase_CSharp/CPMBase/bin/Debug/net8.0/runtimes/win-x64/native/libSkiaSharp.dll
+/workspaces/CPMBase_CSharp/CPMBase/bin/Debug/net8.0/runtimes/win-x86/native/libSkiaSharp.dll
+/workspaces/CPMBase_CSharp/CPMBase/obj/Debug/net8.0/CPMBase.csproj.AssemblyReference.cache
 /workspaces/CPMBase_CSharp/CPMBase/obj/Debug/net8.0/CPMBase.GeneratedMSBuildEditorConfig.editorconfig
 /workspaces/CPMBase_CSharp/CPMBase/obj/Debug/net8.0/CPMBase.AssemblyInfoInputs.cache
 /workspaces/CPMBase_CSharp/CPMBase/obj/Debug/net8.0/CPMBase.AssemblyInfo.cs
@@ -24,3 +39,4 @@
 /workspaces/CPMBase_CSharp/CPMBase/obj/Debug/net8.0/CPMBase.pdb
 /workspaces/CPMBase_CSharp/CPMBase/obj/Debug/net8.0/CPMBase.genruntimeconfig.cache
 /workspaces/CPMBase_CSharp/CPMBase/obj/Debug/net8.0/ref/CPMBase.dll
+/workspaces/CPMBase_CSharp/CPMBase/obj/Debug/net8.0/CPMBase.csproj.Up2Date

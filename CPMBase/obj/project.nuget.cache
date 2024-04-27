@@ -1,10 +1,22 @@
 {
   "version": 2,
-  "dgSpecHash": "iIBLjCjHHyjceFeCcXy1HYkdvs/ngAPfkWC1KZ6w9JE2wiclbj+1ZzG9LA6bXNlno0PsjxeOLEYElwNjt7WT5w==",
+  "dgSpecHash": "lQd+snQiQmdAOWrjuZk897gk7P2F0My0969pdlhe99lAhtW4d+cdG9G6sgyFlmavi7taZSHr/WGfARvK+3BWGg==",
   "success": true,
   "projectFilePath": "/workspaces/CPMBase_CSharp/CPMBase/CPMBase.csproj",
   "expectedPackageFiles": [
-    "/home/vscode/.nuget/packages/system.numerics.vectors/4.5.0/system.numerics.vectors.4.5.0.nupkg.sha512"
+    "/root/.nuget/packages/microsoft.netcore.platforms/1.1.0/microsoft.netcore.platforms.1.1.0.nupkg.sha512",
+    "/root/.nuget/packages/microsoft.netcore.targets/1.1.0/microsoft.netcore.targets.1.1.0.nupkg.sha512",
+    "/root/.nuget/packages/microsoft.win32.systemevents/8.0.0/microsoft.win32.systemevents.8.0.0.nupkg.sha512",
+    "/root/.nuget/packages/newtonsoft.json/13.0.3/newtonsoft.json.13.0.3.nupkg.sha512",
+    "/root/.nuget/packages/range/3.0.6/range.3.0.6.nupkg.sha512",
+    "/root/.nuget/packages/skiasharp/2.88.7/skiasharp.2.88.7.nupkg.sha512",
+    "/root/.nuget/packages/skiasharp.nativeassets.linux.nodependencies/2.88.7/skiasharp.nativeassets.linux.nodependencies.2.88.7.nupkg.sha512",
+    "/root/.nuget/packages/skiasharp.nativeassets.macos/2.88.7/skiasharp.nativeassets.macos.2.88.7.nupkg.sha512",
+    "/root/.nuget/packages/skiasharp.nativeassets.win32/2.88.7/skiasharp.nativeassets.win32.2.88.7.nupkg.sha512",
+    "/root/.nuget/packages/system.componentmodel/4.3.0/system.componentmodel.4.3.0.nupkg.sha512",
+    "/root/.nuget/packages/system.drawing.common/8.0.3/system.drawing.common.8.0.3.nupkg.sha512",
+    "/root/.nuget/packages/system.numerics.vectors/4.5.0/system.numerics.vectors.4.5.0.nupkg.sha512",
+    "/root/.nuget/packages/system.runtime/4.3.0/system.runtime.4.3.0.nupkg.sha512"
   ],
   "logs": []
 }
