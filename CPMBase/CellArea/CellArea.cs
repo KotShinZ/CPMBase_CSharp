@@ -16,7 +16,7 @@ namespace CPMBase;
 [Serializable]
 public class CellArea
 {
-	public Position position;
+    public Position position;
 
 	[JsonIgnore]
 	public CellAreaArray parent;
@@ -59,6 +59,38 @@ public class CellArea
 			if (nextAreas[i] != null)
 				if (func(nextAreas[i], (Direction)i)) break;
 		}
+	}
+
+	/// <summary>
+	///  ムーア近傍に対して関数を適用
+	/// </summary>
+	/// <param name="func"></param>
+	/// <param name="dim"></param>
+	public void MooreNextFunc(Func<CellArea, Vector3, bool> func, Dimention dim)
+	{
+		for (int x = -1; x < 2; x++)
+		{
+			for (int y = -1; y < 2; y++)
+			{
+				if (dim == Dimention._3d)
+				{
+					for (int z = -1; z < 2; z++)
+					{
+						if (x == 0 && y == 0 && z == 0) continue;
+						var direction = new Vector3(x, y, z);
+						if (func(parent.GetCellArea(position), direction)) break;
+					}
+				}
+				else
+				{
+					if (x == 0 && y == 0) continue;
+					var direction = new Vector3(x, y, 0);
+					if (func(parent.GetCellArea(position), direction)) break;
+				}
+
+			}
+		}
+
 	}
 
 	/// <summary>

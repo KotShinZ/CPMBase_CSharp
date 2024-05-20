@@ -14,17 +14,15 @@ public class Program
 
     public static void Main(string[] args)
     {
-        ISimration sim = new MiniExample();
-        sim.Run();
+        //ISimration sim = new SweapDiffusionSim();
+        //sim.Run();
+        Start().GetAwaiter().GetResult();
     }
 
-    public void a()
+    public static async Task Start()
     {
-        /* Console.WriteLine("Hello World!");
-         RangePosition rangePosition = new RangePosition(100, 0, 100, 0, 100, 0);
-         var bitmap = new SKBitmap(256, 256);
-         //var canvas = new SKCanvas(bitmap);
-         //rangePosition.DrawAxis(canvas, 256, 256);
-         new PathObject("/HeatMapTest", "test", extention: ".png").WriteToImgFile(bitmap);*/
+        ISimration sim = new SweapDiffusionSim();
+        await sim.Run();
+        Console.WriteLine("実行終了");
     }
 }

@@ -1,19 +1,16 @@
 ﻿using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 
 namespace CPMBase.Base;
 
-public class StepUpdater
+public class StepUpdater : TimeUpdatable
 {
-    public double dt = 0.1; //時間刻み
-    public double time; //現在の時間
-    public double endTime;  //終了時間
+    //public static StepUpdater instance; //インスタンス
 
-    public List<IUpdatable> updatables; //毎時間更新される処理を管理するためのリスト
+    public List<IUpdatable> updatables = new(); //毎時間更新される処理を管理するためのリスト
 
     public Task task; //非同期で行われている処理を管理するためのクラス
-
-    public Random random = new Random(); //乱数
 
     public float printDurationPer = 0.1f; //進捗を表示する間隔
 
@@ -21,47 +18,27 @@ public class StepUpdater
 
     public int stepNum = 0; //ステップ数
 
+    public bool isInit = true;
+    public bool isUpdate = true;
+
+    public bool isEnd = true;
+
+    public bool isProgress = true;
+
     public Action preUpdateFunc; //毎時間更新される処理を管理するためのデリゲート(floatで書き出し時間間隔を受け取る(0~1の間で受け取る))
     public Action postUpdateFunc; //毎時間更新される処理を管理するためのデリゲート(floatで書き出し時間間隔を受け取る(0~1の間で受け取る))
 
-    public Action OnWrite; //ファイルを書き込む処理を管理するためのデリゲート
+    public TimeAction preUpdateTimeAction;
 
-
-    public bool isWrite = false; //ファイルを書き込むかどうか
-    public float writeTime = 1; //ファイルを書き込む間隔
-    public int writeStep = 0; //ファイルを書き込むステップ数
-    public bool isStepOrTime = false; //ファイルを書き込むステップ数か時間か true:ステップ数 false:時間
-    public PathObject writepath; //ファイルを書き込むパス
-
-    public Vector2 resolution = default; //画像の解像度
-
-    //public List<TimeFunc> timeFuncs = new List<TimeFunc>(); //時間によって実行される処理を管理するためのリスト
-
+    public TimeAction postUpdateTimeAction;
 
     public StepUpdater(double dt, double endTime)
     {
+        nowTime = 0;
         this.dt = dt;
         this.endTime = endTime;
-        time = 0;
         updatables = new List<IUpdatable>();
-    }
-
-    public void SetWrite(float time, PathObject path, Vector2 resolution = default)
-    {
-        isWrite = true;
-        writeTime = time;
-        isStepOrTime = false;
-        writepath = path;
-        this.resolution = resolution;
-    }
-
-    public void SetWriteStep(int step, PathObject path, Vector2 resolution = default)
-    {
-        isWrite = true;
-        writeStep = step;
-        isStepOrTime = true;
-        writepath = path;
-        this.resolution = resolution;
+        //instance = this;
     }
 
     /// <summary>
@@ -70,6 +47,11 @@ public class StepUpdater
     public void Add(IUpdatable updatable)
     {
         updatables.Add(updatable);
+        if (updatable is TimeUpdatable timeUpdatable)
+        {
+            timeUpdatable.dt = dt;
+            timeUpdatable.endTime = endTime;
+        }
     }
 
     /// <summary>
@@ -113,7 +95,7 @@ public class StepUpdater
     /// <param name="pathObject"></param>
     /// <returns></returns>
     int pathNum = 0;
-    PathObject GetPath(float time, int step, PathObject pathObject)
+    public PathObject AddTimeToPathObj(StepUpdater updater, PathObject pathObject)
     {
         //pathObject.fullPath = pathObject.path + "/" + time + "_" + step + "_" + pathObject.name;
         pathObject.prename = pathNum + "_";
@@ -126,77 +108,84 @@ public class StepUpdater
     /// </summary>
     public void Simration()
     {
-        foreach (var updatable in updatables)
+        if (isInit)
         {
-            updatable.Init(this); //シミュレーション開始時に１度だけ呼び出される
-        }
-        while (time < endTime)  //終了時間まで繰り返す
-        {
-            if (time % (endTime * printDurationPer) < dt)
-            {
-                Console.WriteLine("進捗: " + (int)(time / endTime * 100) + "%"); //進捗を表示
-            }
-
-
-            preUpdateFunc?.Invoke(); //毎時間更新される処理を実行
             foreach (var updatable in updatables)
             {
-                updatable.Update(this); //毎時間更新される処理を実行
+                updatable.Init(this); //シミュレーション開始時に１度だけ呼び出される
             }
-            postUpdateFunc?.Invoke(); //毎時間更新される処理を実行
-
-            if (isWrite)
-            {
-                if (isStepOrTime)
-                {
-                    if (stepNum % writeStep == 0)
-                    {
-                        Write();
-                    }
-                }
-                else
-                {
-                    if (time % writeTime < dt)
-                    {
-                        Write();
-                    }
-                }
-            }
-
-            time += dt;
-            stepNum++;
         }
-
+        if (isUpdate)
+        {
+            while (nowTime < endTime)  //終了時間まで繰り返す
+            {
+                var isEnd = Step(); //ステップを進める
+                if (isEnd) { break; }
+            }
+        }
+        if (isEnd)
+        {
+            foreach (var updatable in updatables)
+            {
+                updatable.End(this); //シミュレーション開始時に１度だけ呼び出される
+                if (updatable is TimeUpdatable timeUpdatable)
+                {
+                    timeUpdatable.Reset();
+                }
+            }
+        }
+        isEnd = false;
     }
 
-    /// <summary>
-    ///  すべてのUpdatablesのWriteメソッドを呼び出す
-    /// </summary>
-    public void Write()
+    public virtual bool Step()
     {
+        PreStep();
+        preUpdateFunc?.Invoke(); //毎時間更新される処理を実行
+        preUpdateTimeAction?.Invoke((float)dt);
+
+        bool isAllEnd = true;
+        bool isTimeUpdatable = false;
+
+        if (nowTime % (endTime * printDurationPer) < dt && isProgress)
+        {
+            Console.WriteLine("進捗: " + (int)(nowTime / endTime * 100) + "%"); //進捗を表示
+        }
+
         foreach (var updatable in updatables)
         {
-            OnWrite?.Invoke();
-            var writable = updatable as ITimePathWrite;
-            writable.Write((float)time, stepNum, GetPath((float)time, stepNum, writepath)); //ファイルを書き込む
+
+            if (updatable is TimeUpdatable timeUpdatable)
+            {
+                isTimeUpdatable = true;
+                if (timeUpdatable.isEnd == false) { isAllEnd = false; }
+
+            }
+            updatable.Update(this); //毎時間更新される処理を実行
         }
+
+
+        postUpdateFunc?.Invoke(); //毎時間更新される処理を実行
+        postUpdateTimeAction?.Invoke((float)dt);
+        PostStep();
+        nowTime += dt;
+        stepNum++;
+        return isAllEnd && isTimeUpdatable;
     }
+
+    public virtual void PreStep() { }
+    public virtual void PostStep() { }
 
     /// <summary>  
     ///  シミュレーションを停止  
     /// </summary>
-    public void Stop()
-    {
-        task.Wait();
-    }
-
+    public void Stop() { task.Wait(); }
 
     /// <summary>
     /// シミュレーションをリセット
     /// </summary>
     public void Reset()
     {
-        time = 0;
+        nowTime = 0;
         task.Dispose();
     }
 }

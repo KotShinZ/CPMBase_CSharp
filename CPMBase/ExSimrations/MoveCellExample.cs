@@ -39,7 +39,7 @@ namespace CPMBase.ExSimrations
         }
 
         public void Run()
-        {
+        {/*
             Init();
 
             var cpm = new CPM_Base(range, dim: Dimention._2d);
@@ -58,7 +58,7 @@ namespace CPMBase.ExSimrations
             updater.Add(cpm);
             updater.SetWrite(writeDuration, path);
 
-            updater.StartSync();
+            updater.StartSync();*/
 
         }
 

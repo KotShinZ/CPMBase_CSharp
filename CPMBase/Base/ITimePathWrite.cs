@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Threading.Tasks;
 
 namespace CPMBase.Base
@@ -11,6 +12,7 @@ namespace CPMBase.Base
     public interface ITimePathWrite
     {
         public void Write(float time, int step, PathObject pathObject);
+        public void WriteImage(float time, int step, PathObject pathObject, Vector2 resolution);
     }
 
     public interface ITimePathWrite<T>

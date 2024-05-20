@@ -2,6 +2,7 @@
 using System.Numerics;
 using CPMBase.Base;
 using CPMBase.CPM;
+using KGySoft.CoreLibraries;
 using Newtonsoft.Json;
 
 namespace CPMBase;
@@ -14,7 +15,6 @@ public class CPMArea : CellArea
     [JsonIgnore]
     public Cell cell; //このエリアに含まれる細胞
 
-    [JsonIgnore]
     public int nextSame
     {
         get => _nextSame;
@@ -25,13 +25,11 @@ public class CPMArea : CellArea
         }
     }
     private int _nextSame; //隣接する同じ細胞の数
-    [JsonIgnore]
     public int preNextSame; //前の隣接する同じ細胞の数
 
     [JsonIgnore]
     public int nextDiff => ((int)dim) * 2 - nextSame; //隣接する異なる細胞の数
 
-    [JsonIgnore]
     public Dimention dim;
 
     private static int[] sobelArray2D = new int[] { 1, 2, 1, 0, 0, 0, -1, -2, -1 };
@@ -40,29 +38,49 @@ public class CPMArea : CellArea
 
     public float activity
     {
-        get { return _activity; }
-        set
+        get { return _activity; } //1秒(全セル探索)で 1 / maxact 分だけ減少
+        private set
         {
-            CPM_Base.sumActivity += value - _activity;
-            _activity = value;
+            //CPM_Base.sumActivity += value - _activity; //合計を更新
+            _activity = MathF.Max(value, minActivity);
         }
+        /*get { return MathF.Max( _activity - (float)(StepUpdater.instance.time - activityTime) * (1 / cell.maxact), 0); } //1秒(全セル探索)で 1 / maxact 分だけ減少
+        private set
+        {
+            activityTime = StepUpdater.instance.time;
+            CPM_Base.sumActivity += value - _activity; //合計を更新
+            _activity = MathF.Max(value, minActivity);
+        }*/
     }
     float _activity;
+    // double activityTime = 0;
+    float minActivity = 0.01f;
 
+    public bool isNextOther = false; //隣が異なる細胞か
+
+    [JsonIgnore]
     public CPMBase.Base.Datas.LinkedListNode<CPMArea> node;
 
     public CPMArea(Dimention dim, Position position = null, CellAreaArray cellAreaArray = null, Cell cell = null) : base(position, cellAreaArray)
     {
         this.dim = dim;
         this.cell = cell ?? EmptyCell.emptyCell;
+        activity = minActivity;
+        node = new CPMBase.Base.Datas.LinkedListNode<CPMArea>(this);
     }
 
     /// <summary>
     /// 活動量の更新
     /// </summary>
-    public void UpdateActivity()
+    public void UpdateActivity(float mul = 1)
     {
-        if (activity > 0) activity = MathF.Max(0, MathF.Min(1, activity - 1 / cell.maxact));
+        //Console.WriteLine(1 / (cell.maxact * mul));
+        activity = MathF.Max(0, MathF.Min(1, activity - 1 / cell.maxact));
+    }
+
+    public void SetActivityToOne()
+    {
+        activity = 1;
     }
 
     /// <summary>
@@ -91,7 +109,7 @@ public class CPMArea : CellArea
     /// </summary>
     /// <param name="target"></param>
     /// <param name="targetArea"></param>
-    public void SwapCell(Cell target, CPMArea targetArea)
+    public void SwapCell(Cell target, CPMArea targetArea) //このセルは浸食先, targetは浸食元
     {
         if (this.cell == target) return;
 
@@ -101,6 +119,20 @@ public class CPMArea : CellArea
         this.cell.OnSwaped(targetArea);
         target.OnSwaped(this);
 
+        nextSame = 0;
+
+        NextFunc((c, d) =>
+        {
+            if (c.cell == cell)
+            {
+                c.nextSame += 1;
+                nextSame += 1;
+            }
+            else if (c.cell == prevCell) c.nextSame -= 1;
+            //c.CullNextSame();
+            return false;
+        }, dim);
+
         //cell.areas.Add(this); //細胞にエリアを登録
         //prevCell.areas.Remove(this); //前の細胞からエリアを削除
     }
@@ -108,23 +140,24 @@ public class CPMArea : CellArea
     /// <summary>
     /// 隣の同じ細胞をカウントする  
     /// </summary>
-    public void CullNextSame(Cell _cell)
+    public int CullNextSame(Cell _cell)
     {
-        nextSame = 0;
+        var _nextSame = 0;
         NextFunc((c, d) =>
         {
             if (c.cell == _cell)
             {
-                nextSame++;
+                _nextSame++;
             }
             return false;
         }, dim);
         //CullNextSovel(); //ソーベルフィルターで隣接する細胞をカウント
+        return _nextSame;
     }
 
     public void CullNextSame()
     {
-        CullNextSame(cell);
+        nextSame = CullNextSame(cell);
     }
 
     /// <summary>
@@ -152,4 +185,54 @@ public class CPMArea : CellArea
             (c, v) => { return action((CPMArea)c, DirectionHelper.GetVector(v)); },
             dim);
     }
+
+    /// <summary>
+    /// 隣に違う細胞があるかどうか
+    /// </summary>
+    /// <param name="cell"></param>
+    /// <returns></returns>
+    public virtual bool IsNextToOtherCell()
+    {
+        bool b = false;
+
+        NextFunc((other, dir) =>
+        {
+            var next = ((CPMArea)other).cell != cell; //違う細胞が隣にあるかどうか
+            if (next)
+            {
+                b |= true;
+                return true;
+            }
+            else return false;
+        }, dim);
+
+        return b;
+    }
+
+    /// <summary>
+    /// 指定の細胞と隣り合っているかどうか
+    /// </summary>
+    /// <param name="cell"></param>
+    /// <returns></returns>
+    public virtual bool IsNextToCell(Cell _cell)
+    {
+        bool b = false;
+
+        NextFunc((other, dir) =>
+        {
+            var next = ((CPMArea)other).cell == _cell; //違う細胞が隣にあるかどうか
+            if (next)
+            {
+                b |= true;
+                return true;
+            }
+            else return false;
+        }, dim);
+
+        return b;
+    }
+
+
+
+
 }

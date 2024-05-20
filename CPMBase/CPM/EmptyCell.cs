@@ -16,6 +16,7 @@ public class EmptyCell : Cell
         return 0;
     }
 
+
     public override void SetRandomColor()
     {
         color = Color.White;

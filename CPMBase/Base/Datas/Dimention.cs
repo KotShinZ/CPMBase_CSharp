@@ -4,10 +4,10 @@ using System.Numerics;
 
 public enum Dimention
 {
-    _0d,
-    _1d,
-    _2d,
-    _3d
+    _0d = 0,
+    _1d = 1,
+    _2d = 2,
+    _3d = 3
 }
 
 public static class DimentionExpand

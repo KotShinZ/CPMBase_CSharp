@@ -23,10 +23,6 @@ public class CellAreaArray
 
     public RangePosition size;
 
-    public Range3 arrayRange;
-
-    private Random random = new Random();
-
     /*public CellAreaArray(RangePosition range, CellArea cell = null, Dimention dim = Dimention._3d, Vector3 dV = default)
     {
         this.dim = dim;
@@ -56,24 +52,25 @@ public class CellAreaArray
         this.size = range;
 
         cellAreas = new CellArea[(int)size.arrayRange.Length.X, (int)size.arrayRange.Length.Y, (int)size.arrayRange.Length.Z]; //配列の大きさを設定
-        arrayRange = size.arrayRange;
 
         if (func != null)
         {
             AllFunc((x, y, z, c) =>
             {
-                CellArea newArea = func.Invoke();
+                CellArea newArea = func != null ? func.Invoke() : new CellArea();
                 newArea.parent = this;
                 newArea.position = new Position(new Vector3(x, y, z));
 
                 SetCell(x, y, z, newArea);
             });
+
+            AllFunc((x, y, z, c) =>
+            {
+                c.SetInitNextAreas();
+            });
         }
 
-        AllFunc((x, y, z, c) =>
-        {
-            c.SetInitNextAreas();
-        });
+
     }
 
     public void SetCell(int x, int y, int z, CellArea area)
@@ -154,13 +151,13 @@ public class CellAreaArray
 
     public void AllFunc(Action<int, int, int, CellArea> action)
     {
-        var _z = dim == Dimention._3d ? arrayRange.z.Length : 1;
-        var _y = dim == Dimention._3d || dim == Dimention._2d ? arrayRange.y.Length : 1;
+        var _z = dim == Dimention._3d ? size.arrayRange.z.Length : 1;
+        var _y = dim == Dimention._3d || dim == Dimention._2d ? size.arrayRange.y.Length : 1;
         for (int z = 0; z < _z; z++)
         {
             for (int y = 0; y < _y; y++)
             {
-                for (int x = 0; x < arrayRange.x.Length; x++)
+                for (int x = 0; x < size.arrayRange.x.Length; x++)
                 {
                     action.Invoke(x, y, z, cellAreas[x, y, z]);
                 }
@@ -255,7 +252,7 @@ public class CellAreaArray
                 try
                 {
                     if (area.position.arrayPosition.X + v.X < 0 || area.position.arrayPosition.Y + v.Y < 0 || area.position.arrayPosition.Z + v.Z < 0) continue;
-                    if (area.position.arrayPosition.X + v.X >= arrayRange.Length.X || area.position.arrayPosition.Y + v.Y >= arrayRange.Length.Y || area.position.arrayPosition.Z + v.Z >= arrayRange.Length.Z) continue;
+                    if (area.position.arrayPosition.X + v.X >= size.arrayRange.Length.X || area.position.arrayPosition.Y + v.Y >= size.arrayRange.Length.Y || area.position.arrayPosition.Z + v.Z >= size.arrayRange.Length.Z) continue;
 
                     var cell = GetCellArea(p);
                     var b = action.Invoke(cell, v);
@@ -288,19 +285,9 @@ public class CellAreaArray
 
     }
 
-    /// <summary>
-    ///  隣のエリアに対して処理を行う
-    /// </summary>
-    /// <param name="area">中心のエリア</param>
-    /// <param name="action">行うアクション(trueを返すと終了する)</param>
-    /// <param name="dim">次元</param>
-    public void NextFunc(CellArea area, Func<CellArea, Direction, bool> action, Dimention dim)
-    {
-        area.NextFunc(action, dim);
-    }
-
     public CellArea GetRandomCell()
     {
-        return cellAreaList[random.Next(cellAreaList.Count)];
+        //Console.WriteLine(cellAreaList[Randomizer.Next(0,cellAreaList.Count)]);
+        return cellAreaList[Randomizer.Next(cellAreaList.Count)];
     }
 }

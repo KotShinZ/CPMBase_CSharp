@@ -14,6 +14,8 @@ public class Range3 : ICalculateOperators<Range3, Vector3, Range3>
     public Range y;
     public Range z;
 
+    public Vector3 center => new Vector3((float)x.center, (float)y.center, (float)z.center);
+
 
     public Range3(Range x, Range y, Range z)
     {
@@ -72,6 +74,7 @@ public class Range3 : ICalculateOperators<Range3, Vector3, Range3>
     }
 
     public Vector3 Length;
+    public Vector2 Length2D => new Vector2(Length.X, Length.Y);
 
     /// <summary>
     ///  valueがこのrangeに含まれるかどうか

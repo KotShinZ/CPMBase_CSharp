@@ -41,13 +41,14 @@ namespace CPMBase.ExSimrations
             Console.WriteLine("初期化を開始します");
 
             path = new PathObject(pathName, "image.png");
-            cpm = new CPM_Base(range, dim: Dimention._2d);
+            //cpm = new CPM_Base(range, dim: Dimention._2d);
             cpm.T = T;
         }
 
 
         public void Run()
         {
+        /*
             Init();
 
             cpm.Add(
@@ -61,13 +62,13 @@ namespace CPMBase.ExSimrations
             ); // 細胞を追加
 
             Update();
-            End();
+            End();*/
         }
 
         public void Update()
         {
             updater.Add(cpm); //CPMをセット
-            updater.SetWrite(writeDuration, path); //書き出し設定
+            //updater.SetWrite(writeDuration, path); //書き出し設定
 
             updater.StartSync(); //シミュレーション開始(非同期)
         }

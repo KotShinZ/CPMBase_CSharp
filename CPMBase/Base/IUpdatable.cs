@@ -21,4 +21,9 @@ public interface IUpdatable
     /// 毎時間更新される処理
     /// </summary>
     public void Update(StepUpdater stepUpdater);
+
+    /// <summary>
+    ///   シミュレーション終了時に１度だけ呼び出される
+    /// </summary>
+    public void End(StepUpdater stepUpdater);
 }

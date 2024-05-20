@@ -36,35 +36,36 @@ namespace CPMBase.ExSimrations
 
         public void Init()
         {
-            var cpm = new CPM_Base(range, dim: Dimention._2d);
-            cpm.T = T;
+            /*
+                var cpm = new CPM_Base(range, dim: Dimention._2d);
+                cpm.T = T;
 
-            cpm.Add(
-                new Cell(20, 40, 1, 1), //細胞のパラメータ
-                new Position(10, 15, 0), //細胞の位置
-                new Position(4, 4, 0) //細胞の大きさ
-            ); // 細胞を追加
+                cpm.Add(
+                    new Cell(20, 40, 1, 1), //細胞のパラメータ
+                    new Position(10, 15, 0), //細胞の位置
+                    new Position(4, 4, 0) //細胞の大きさ
+                ); // 細胞を追加
 
-            cpm.Add(
-                new Cell(20, 10, 1, 1), //細胞のパラメータ
-                new Position(20, 15, 0), //細胞の位置
-                new Position(4, 4, 0) //細胞の大きさ
-            ); // 細胞を追加
+                cpm.Add(
+                    new Cell(20, 10, 1, 1), //細胞のパラメータ
+                    new Position(20, 15, 0), //細胞の位置
+                    new Position(4, 4, 0) //細胞の大きさ
+                ); // 細胞を追加
 
-            updater.Add(cpm);
+                updater.Add(cpm);
 
-            updater.SetWrite(10000000, path);
-            updater.isWrite = false;
-            //updater.Write();
+                updater.SetWrite(10000000, path);
+                updater.isWrite = false;
+                //updater.Write();
 
-            updater.preUpdateFunc += () =>
-            {
-                Console.WriteLine(
-                "A1 : " + cpm.cells[0].A + "   " + "L1 : " + cpm.cells[0].L + "   " + "A2 : " + cpm.cells[1].A + "   " + "L2 : " + cpm.cells[1].L
-                );
-                updater.Write();
-                //cpm.WriteAsJson(updater, path);
-            };
+                updater.preUpdateFunc += () =>
+                {
+                    Console.WriteLine(
+                    "A1 : " + cpm.cells[0].A + "   " + "L1 : " + cpm.cells[0].L + "   " + "A2 : " + cpm.cells[1].A + "   " + "L2 : " + cpm.cells[1].L
+                    );
+                    updater.Write();
+                    //cpm.WriteAsJson(updater, path);
+                };*/
         }
 
         public async Task Start()

@@ -2,3 +2,7 @@ Output/
 **/bin/
 **/obj/
 Output
+**/bin
+**/obj
+.vs
+.mono

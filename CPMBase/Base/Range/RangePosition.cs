@@ -13,6 +13,11 @@ public class RangePosition
     public Range3 arrayRange;
     public Range3 realRange;
 
+    public decimal surface;
+
+    public double arraySurface;
+    public double realSurface;
+
     public Vector3 dV;
 
     public double arrayVolume;
@@ -115,6 +120,10 @@ public class RangePosition
         arrayVolume = arrayRange.x.Length * arrayRange.y.Length * arrayRange.z.Length;
         realVolume = realRange.x.Length * realRange.y.Length * realRange.z.Length;
         volume = (decimal)arrayRange.x.Length * (decimal)arrayRange.y.Length * (decimal)arrayRange.z.Length;
+
+        surface = (decimal)arrayRange.x.Length * (decimal)arrayRange.y.Length;
+        arraySurface = arrayRange.x.Length * arrayRange.y.Length;
+        realSurface = realRange.x.Length * realRange.y.Length;
     }
 
     public RangePosition AddArray(Vector3 value)

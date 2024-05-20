@@ -2,7 +2,7 @@
 exampleName="$1"
 
 # 出力ディレクトリの設定
-outputDir="/workspaces/CPMBase_CSharp/Output/$exampleName"
+outputDir="$exampleName"
 
 # 出力ファイル名の設定
 outputFile="output_video.mp4"

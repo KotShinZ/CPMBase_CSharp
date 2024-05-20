@@ -26,18 +26,26 @@ namespace CPMBase.ExSimrations
         public string pathName => "/workspaces/CPMBase_CSharp/Output/" + this.GetType().Name;
 
         //時間の更新
-        public StepUpdater updater = new StepUpdater(dt: 1, endTime: 50000000);
+        public int end = 3000 * 300;
+
+        public StepUpdater updater;
 
         //public float writeDuration = 10;
         //public float writeDuration => 0.01f * (float)updater.endTime; //割合で決める
-        public float writeDuration => (float)updater.endTime / 500; //数で決める
+        public float writeDuration => end / 1000; //数で決める
 
-        public float T = 23; //ボルツマン温度
+        public float T = 1f; //ボルツマン温度
 
         public CPM_Base cpm;
 
-        void Init()
+        public void PreInit()
         {
+            updater = new StepUpdater(dt: 1, endTime: end);
+        }
+
+        void ISimration.Init()
+        {
+            /*Console.WriteLine("ManyCellSphere2DExample ");
             Console.WriteLine("初期化を開始します");
 
             path = new PathObject(pathName, "image.png");
@@ -45,31 +53,24 @@ namespace CPMBase.ExSimrations
             cpm.T = T;
 
             Console.WriteLine("CPM領域を構築致しました");
-        }
 
+            updater.Add(cpm); //CPMをセット
+            updater.SetWrite(writeDuration, path); //書き出し設定
+            updater.resolution = new Vector2(1000, 1000); //解像度設定
 
-        public void Run()
-        {
-            Init();
 
             Console.WriteLine("細胞を追加します");
 
-            cpm.AddArea(
-                () => new Cell(2500, 300, 1, 1), //細胞のパラメータ
-                new RangePosition(600, 400, 600, 400, 0, 0), //細胞の位置
-                100 // 細胞を追加
-            ); // 細胞を追加
+            cpm.AddCellsRect(
+                () => new Cell(r: 15, 1, 1, maxact: 1f, lact: 15), //細胞のパラメータ
+                new Position(20, 20, 0), //細胞の大きさ
 
-            Update();
-
-            End();
+                100 // 細胞
+            ); // 細胞を追加*/
         }
 
-        public void Update()
+        public async Task Start()
         {
-            updater.Add(cpm); //CPMをセット
-            updater.SetWrite(writeDuration, path); //書き出し設定
-
             updater.StartSync(); //シミュレーション開始(非同期)
         }
 
@@ -78,24 +79,11 @@ namespace CPMBase.ExSimrations
             Utill.RunBashScriptWithArgument("/workspaces/CPMBase_CSharp/movie.sh", this.GetType().Name); //動画作成
         }
 
-        public void PreInit()
-        {
-            throw new NotImplementedException();
-        }
-
-        void ISimration.Init()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task Start()
-        {
-            throw new NotImplementedException();
-        }
-
         public void Final()
         {
-            throw new NotImplementedException();
+
         }
+
+
     }
 }

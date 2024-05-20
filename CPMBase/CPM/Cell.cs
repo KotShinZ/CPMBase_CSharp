@@ -13,7 +13,7 @@ namespace CPMBase.CPM
     /// </summary>
     public class Cell
     {
-        public static int nowLastID = 0;
+        public Position initPosition; //初期位置
 
         public int A0; //目標面積
 
@@ -49,8 +49,8 @@ namespace CPMBase.CPM
 
         //public int L_easy => (L > 0) ? 1 : 0; //外側にあるかどうか
 
-        public int preL; //前の周長
-        public int _L;
+        public int preL { get; private set; } //前の周長
+        public int _L { get; private set; } //周長
 
         public float kA; //面積係數
 
@@ -58,7 +58,7 @@ namespace CPMBase.CPM
 
         public Color color; //セルの色
 
-        public int id = nowLastID++; //セルのID
+        public int id = 0; //セルのID
 
         //public List<CPMArea> areas; //細胞の領域
 
@@ -76,15 +76,17 @@ namespace CPMBase.CPM
         } //エネルギー
         private float preEnergy; //前のエネルギー
         private float _energy; //エネルギー
+
         public float kAdhesion; //接着力の定数
 
         public Vector3 constantPower; //一定の力をかける
 
-        public float minusEnergySwaped = 0f; //細胞が入れ替わったときにエネルギーを減らす
 
         public float maxact = 1; //活動持続性（最小値 1）
 
         public float lact = 0; //活動量
+
+        public float T = 1;
 
         public Cell(
             int A0,
@@ -95,19 +97,49 @@ namespace CPMBase.CPM
             Vector3 constantPower = default(Vector3),
             float minusEnergySwaped = 0f,
             float maxact = 1,
-            float lact = 0
+            float lact = 0,
+            float T = 0.5f
         )
         {
             this.A0 = A0;
             this.L0 = L0;
             this.kA = kA;
             this.kL = kL;
+
             this.kAdhesion = kAdhesion;
             this.constantPower = constantPower == default(Vector3) ? new Vector3(0, 0, 0) : constantPower;
 
-            this.minusEnergySwaped = minusEnergySwaped;
             this.maxact = maxact;
             this.lact = lact;
+            this.T = T;
+
+            SetRandomColor();
+        }
+
+        public Cell(
+            int r,
+            float kA,
+            float kL,
+
+            float kAdhesion = 0f,
+            Vector3 constantPower = default(Vector3),
+
+            float minusEnergySwaped = 0f,
+            float maxact = 1,
+            float lact = 0,
+            float T = 1f
+        )
+        {
+            this.A0 = (int)(r * r * MathF.PI);
+            this.L0 = (int)(2 * r * MathF.PI);
+            this.kA = kA;
+            this.kL = kL;
+            this.kAdhesion = kAdhesion;
+            this.constantPower = constantPower == default(Vector3) ? new Vector3(0, 0, 0) : constantPower;
+
+            this.maxact = maxact;
+            this.lact = lact;
+            this.T = T;
 
             SetRandomColor();
         }
@@ -249,41 +281,58 @@ namespace CPMBase.CPM
         /// </summary>
         /// <param name="add"></param>
         /// <param name="remove"></param>
-        public void CullL_nums(CPMArea add = null, CPMArea remove = null)
+        public void CullL_nums(CPMArea area, CPMArea other, bool addOrRemove)
         {
             var der = 0; //増減
 
-            if (add != null) //細胞を追加する場合(addはこの細胞と同じではない)
+            if (addOrRemove) //細胞を追加する場合(addはこの細胞と同じではない)
             {
-                der += 1; //追加する細胞の分だけ増える
+                var sameCellNum = 0;
 
-                add.NextFunc((c, v) =>
+                other.NextFunc((c, v) =>
                 {
-                    if (c.cell == this)//同じ細胞の時
+                    if (((CPMArea)c).cell == this)//同じ細胞の時
                     {
-                        c.CullNextSame(this); //隣のセルの同じ細胞の数を更新
+                        sameCellNum++;
                         //Console.WriteLine("c.nextSame : " + c.nextSame);
-                        if (c.nextSame >= (int)add.dim * 2 - 1) der -= 1; //自分以外の3つが隣接している場合、どのセルとも隣り合うので周長は減る
+                        //c.CullNextSame(this); //隣のセルの同じ細胞の数を更新
+                        //Console.WriteLine("c.nextSame : " + c.nextSame);
+                        //Console.WriteLine("c.nextSame : " + c.nextSame);
+                        if (((CPMArea)c).nextDiff == 1)
+                        {
+                            der -= 1; //自分以外の3つが隣接している場合、どのセルとも隣り合うので周長は減る
+                        }
                     }
                     return false;
-                }, add.dim);
+                }, other.dim);
+
+                if (sameCellNum != 4) der += 1; //追加する細胞の分だけ増える
 
             }
-            else if (remove != null) //細胞を削除する場合
+            else //細胞を削除する場合
             {
                 der -= 1; //追加する細胞の分だけ減る
 
-                remove.NextFunc((c, v) =>
+                other.NextFunc((c, v) =>
                 {
+                    //Console.Write(c.cell.GetType() + "   ");
                     if (c.cell == this)//同じ細胞の時
                     {
-                        c.CullNextSame(); //隣のセルの同じ細胞の数を更新
-                        if (c.nextSame == (int)remove.dim * 2) der += 1; //すべての隣のセルが同じ細胞の場合、周長は増える
+                        //Console.Write(c.position.arrayPosition);
+                        //Console.WriteLine("   c.nextDiff : " + c.nextDiff);
+                        //c.CullNextSame(); //隣のセルの同じ細胞の数を更新
+                        if (((CPMArea)c).nextDiff == 0)
+                        {
+                            der += 1; //すべての隣のセルが同じ細胞の場合、周長は増える
+                            //Console.WriteLine(der);
+                        }
                     }
                     return false;
-                }, remove.dim);
+                }, other.dim);
             }
             ///Console.WriteLine("der : " + der);
+            /// 
+
 
             L += der;
         }
@@ -298,7 +347,7 @@ namespace CPMBase.CPM
         {
             CullA(add, remove);
             //CullL(add, remove);
-            CullL_nums(add, remove);
+            //CullL_nums(add, remove);
 
             nowEnergy = CullEnergy(A, L);
 
@@ -328,9 +377,9 @@ namespace CPMBase.CPM
         /// <returns></returns>
         public virtual float CullEnergy(int A, int L)
         {
-            var da = A - A0;
-            var dl = L - L0;
-            return kA * da * da + kL * dl * dl;
+            var da = A - A0; //1固定
+            var dl = L - L0; //-3 ~ 3
+            return kA * da * da + kL * dl * dl; //-2 ~ 4
         }
 
         /// <summary>
@@ -341,11 +390,12 @@ namespace CPMBase.CPM
             A = preA;
             L = preL;
             nowEnergy = preEnergy;
+            //nowAEnergy = preAEnergy;
+            //nowLEnergy = preLEnergy;
         }
 
         public virtual void OnSwaped(CPMArea otherArea)
         {
-            nowEnergy -= minusEnergySwaped;
         }
 
         /// <summary>

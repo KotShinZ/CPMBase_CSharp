@@ -17,7 +17,12 @@ namespace CPMBase.ExSimrations
 
         public void Final();
 
-        public async void Run()
+        public virtual async Task Run()
+        {
+            AllSim();
+        }
+
+        public async Task AllSim()
         {
             PreInit();
             Init();

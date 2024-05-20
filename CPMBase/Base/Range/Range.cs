@@ -11,6 +11,8 @@ public class Range : ICalculateOperators<Range, double, Range>
     public double max;
     public double min;
 
+    public double center => (max + min) / 2;
+
     public Range(double max, double min)
     {
         this.max = max;
