@@ -1,0 +1,6 @@
+**/artifacts
+Output
+**/bin
+**/obj
+.vs
+.mono
