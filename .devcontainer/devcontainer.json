@@ -1,0 +1,46 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/dotnet
+{
+	"name": "C# (.NET)",
+	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
+	"build": {
+        "dockerfile": "Dockerfile" // 相対パス表記
+    },
+	"runArgs": [
+    "-m", "8g"
+  	],
+	// Features to add to the dev container. More info: https://containers.dev/features.
+	// "features": {},
+	// Use 'forwardPorts' to make a list of ports inside the container available locally.
+	// "forwardPorts": [5000, 5001],
+	// "portsAttributes": {
+	//		"5001": {
+	//			"protocol": "https"
+	//		}
+	// }
+	// Use 'postCreateCommand' to run commands after the container is created.
+	// "postCreateCommand": "dotnet restore",
+	// Configure tool-specific properties.
+	"customizations": {
+		"vscode": {
+			"settings": {
+				"csharp.debug.justMyCode": false,
+				"editor.wrappingIndent": "indent",
+				//"editor.defaultFormatter" : "ms-dotnettools.csharp",
+				"dotnet-test-explorer.testProjectPath": "**/*Tests.csproj"
+			},
+			"extensions": [
+				"ms-dotnettools.csdevkit", //C# サポート
+				"jebbs.plantuml", //PlantUML プラントUMLを作成、プレビュー
+				"mhutchie.git-graph", //Git Graph リポジトリのコミット履歴をグラフで表示
+				"doggy8088.netcore-extension-pack", //.NET Core Extension Pack
+				"github.copilot", //GitHub Copilot
+				"gerrnperl.outline-map", //Outline Map アウトラインを分かりやすく表示
+				"formulahendry.dotnet-test-explorer" //.NET Test Explorer テストを実行、表示
+			]
+		}
+	}
+	
+	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
+	// "remoteUser": "root"
+}

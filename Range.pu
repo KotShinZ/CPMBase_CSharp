@@ -1,0 +1,53 @@
+@startuml
+
+
+
+
+package generic{
+    class RangeT<T>{
+        T min
+        T max
+    }   
+    note right of RangeT
+        1次元のRange
+    end note
+
+    class Range3T<T>{
+        
+        RangeT<T> x
+        RangeT<T> y
+        RangeT<T> z
+        
+    }
+    note right of Range3T
+        3次元のRange
+    end note
+
+    class RangePositionT<T>{
+        arrayRange: Range3T
+        realRange: Range3T
+    }
+    note right of RangePositionT
+        位置情報のRange
+    end note
+
+    Range3T --> RangeT
+    RangePositionT --> Range3T
+}
+
+Range -|> RangeT
+RangeDemical -|> RangeT
+
+Range3 -|> Range3T
+Range3Demical -|> Range3T
+
+RangePosition -|> RangePositionT
+RangePositionDemical -|> RangePositionT
+
+
+
+
+
+
+
+@enduml
