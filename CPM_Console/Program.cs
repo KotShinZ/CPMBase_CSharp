@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Threading.Tasks;
+using CPMBase;
 using CPMBase.Base;
+using CPMBase.Base.Datas;
+using CPMBase.CPM;
+using CPMBase.CPMDiffusion;
 using CPMBase.Examples;
 
 
@@ -12,12 +16,14 @@ public class Program
     {
         //ISimration sim = new ParamDiffusionExample();
         //sim.Run();
-        Start().GetAwaiter().GetResult();
+        //Start().GetAwaiter().GetResult();
+        Class1.Main();
     }
 
     public static async Task Start()
     {
-        ISimration sim = new SweapDiffusionSim();
+        Console.WriteLine("実行開始");
+        ISimration sim = new SweapDiffusionSim<CPMDiffusionArea>();
         await sim.Run();
         Console.WriteLine("実行終了");
     }

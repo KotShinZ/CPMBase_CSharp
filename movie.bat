@@ -20,7 +20,7 @@ REM フレームレートを設定（1秒あたりの画像数）
 set "frame_rate=30"
 
 REM FFmpegコマンドを実行して画像を動画に変換
-ffmpeg -y -framerate %frame_rate% -i "%image_dir%\%%d_image.png" -c:v libx264 -pix_fmt yuv420p "%output_video%"
+ffmpeg -y -framerate %frame_rate% -i "%image_dir%\image%%d.png" -c:v libx264 -pix_fmt yuv420p "%output_video%"
 
 echo 動画が作成されました: %output_video%
 pause
