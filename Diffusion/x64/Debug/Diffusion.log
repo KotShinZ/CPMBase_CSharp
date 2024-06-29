@@ -1,10 +1,13 @@
 ﻿C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(517,5): warning MSB8004: Output ディレクトリの末尾がスラッシュではありません。Output ディレクトリが適切に評価されるようにするために、このビルド インスタンスによってスラッシュが追加されます。
-  Compiling CUDA source file ..\cpmbase\cellarea\diffusion\diffusion_kernel.cu...
+  Compiling CUDA source file ..\cpmbase\cellarea\diffusion\diffusion_kernel2.cu...
   
-  C:\Code\CPMBase_CSharp\Diffusion>"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.5\bin\nvcc.exe" -gencode=arch=compute_52,code=\"sm_52,compute_52\" --use-local-env -ccbin "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.39.33519\bin\HostX64\x64" -x cu   -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.5\include" -I"E:\App\vcpkg\installed\x64-windows\include" -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.5\include"  -G   --keep-dir x64\Debug  -maxrregcount=0   --machine 64 --compile -cudart static  -g  -DWIN32 -DWIN64 -D_DEBUG -D_CONSOLE -D_WINDLL -D_MBCS -Xcompiler "/EHsc /W3 /nologo /Od /FS /Zi /RTC1 /MDd " -Xcompiler "/Fdx64\Debug\vc143.pdb" -o C:\Code\CPMBase_CSharp\Diffusion\x64\Debug\diffusion_kernel.cu.obj "C:\Code\CPMBase_CSharp\cpmbase\cellarea\diffusion\diffusion_kernel.cu" 
-  diffusion_kernel.cu
-  tmpxft_00000ed0_00000000-7_diffusion_kernel.cudafe1.cpp
+  C:\Code\CPMBase_CSharp\Diffusion>"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.5\bin\nvcc.exe" -gencode=arch=compute_52,code=\"sm_52,compute_52\" --use-local-env -ccbin "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.39.33519\bin\HostX64\x64" -x cu   -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.5\include" -I"E:\App\vcpkg\installed\x64-windows\include" -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.5\include"  -G   --keep-dir x64\Debug  -maxrregcount=0   --machine 64 --compile -cudart static  -g  -DWIN32 -DWIN64 -D_DEBUG -D_CONSOLE -D_WINDLL -D_MBCS -Xcompiler "/EHsc /W3 /nologo /Od /FS /Zi /RTC1 /MDd " -Xcompiler "/Fdx64\Debug\vc143.pdb" -o C:\Code\CPMBase_CSharp\Diffusion\x64\Debug\diffusion_kernel2.cu.obj "C:\Code\CPMBase_CSharp\cpmbase\cellarea\diffusion\diffusion_kernel2.cu" 
+C:\Code\CPMBase_CSharp\cpmbase\cellarea\diffusion\diffusion_kernel2.cu(211): warning C4005: 'blockDim_y': マクロが再定義されました。
+C:\Code\CPMBase_CSharp\cpmbase\cellarea\diffusion\diffusion_kernel2.cu(211): warning C4005: 'blockDim_y': マクロが再定義されました。
+  diffusion_kernel2.cu
+  tmpxft_00007f5c_00000000-7_diffusion_kernel2.cudafe1.cpp
+C:\Code\CPMBase_CSharp\cpmbase\cellarea\diffusion\diffusion_kernel2.cu(206): warning C4244: '初期化中': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Code\CPMBase_CSharp\cpmbase\cellarea\diffusion\diffusion_kernel2.cu(221): warning C4244: 'return': 'double' から 'float' への変換です。データが失われる可能性があります。
+C:\Code\CPMBase_CSharp\cpmbase\cellarea\diffusion\diffusion_kernel2.cu(217): warning C4996: 'cudaThreadSynchronize': が古い形式として宣言されました。
   dllExports.cpp
-     ライブラリ ..\CPM_Console\bin\Debug\net6.0\Diffusion.lib とオブジェクト ..\CPM_Console\bin\Debug\net6.0\Diffusion.exp を作成中
-LINK : warning LNK4098: defaultlib 'LIBCMT' は他のライブラリの使用と競合しています。/NODEFAULTLIB:library を使用してください。
   Diffusion.vcxproj -> C:\Code\CPMBase_CSharp\CPM_Console\bin\Debug\net6.0\Diffusion.dll

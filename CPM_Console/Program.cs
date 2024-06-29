@@ -14,16 +14,16 @@ public class Program
 
     public static void Main(string[] args)
     {
-        //ISimration sim = new ParamDiffusionExample();
-        //sim.Run();
+        ((ISimration)new SimpleSim<CPMArea>()).Run();
+        //((ISimration)new OnlyDiffusion()).Run();
         //Start().GetAwaiter().GetResult();
-        Class1.Main();
+        //Class1.Main();
     }
 
     public static async Task Start()
     {
         Console.WriteLine("実行開始");
-        ISimration sim = new SweapDiffusionSim<CPMDiffusionArea>();
+        ISimration sim = new SweapDiffusionSim<CPMArea>();
         await sim.Run();
         Console.WriteLine("実行終了");
     }
