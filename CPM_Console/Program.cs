@@ -14,9 +14,9 @@ public class Program
 
     public static void Main(string[] args)
     {
-        ((ISimration)new SimpleSim<CPMArea>()).Run();
+        //((ISimration)new SimpleSim<CPMArea>()).Run();
         //((ISimration)new OnlyDiffusion()).Run();
-        //Start().GetAwaiter().GetResult();
+        Start().GetAwaiter().GetResult();
         //Class1.Main();
     }
 
